@@ -9,6 +9,7 @@ import { FormTypes, MensagemErro, valoresIniciais } from "../../utils/utils";
 import { Form, Formik, FormikHelpers } from "formik";
 import { Mensagem } from "../../components/Mensagem";
 import { Campo } from "../../components/Campo";
+import { ItemListaVaziaEstilizado } from "../../components/Item";
 
 interface DataTypeTarefa {
   id: number,
@@ -93,11 +94,7 @@ export function ListaTarefas() {
                 {item.tarefa}
               </TarefaTitulo>
               <ContainerBotoes>
-                <form onSubmit={(event) => {
-                  event.preventDefault();
-                  const tarefaRemovida = data.filter((tarefa) => tarefa.id !== item.id);
-                  setData(tarefaRemovida);
-                }}>
+                <form onSubmit={() => HandleRemoveItem(item.id)}>
                   <BotaoApagar type="submit">
                     <AiOutlineDelete size={15} />
                   </BotaoApagar>
@@ -109,6 +106,11 @@ export function ListaTarefas() {
       </ListaEstilizada>
     </ContainerApp>
   );
+
+  function HandleRemoveItem(id: number) {
+    const tarefaRemovida = data.filter((tarefa) => tarefa.id !== id);
+    setData(tarefaRemovida);
+  }
 }
 
 const ContainerBotoesEstilizado = styled(ContainerBotoes)`
@@ -167,19 +169,4 @@ const TarefaTitulo = styled.span`
   width: 100%;
   margin-right: 5px;
   margin-left: 5px;
-`;
-
-const ItemListaVaziaEstilizado = styled.li`
-  list-style: none;
-  font-size: 40px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background-color: aliceblue;
-  border-color: cadetblue;
-  border-width: 1px;
-  border-style: solid;
-  padding: 10px;
-  border-radius: 10px;
 `;
