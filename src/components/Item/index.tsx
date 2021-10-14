@@ -1,4 +1,8 @@
+import { useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
 import styled from "styled-components";
+import { Botao } from "../Botao";
+import { ContainerBotoes } from "../Container";
 
 export const ItemListaVaziaEstilizado = styled.li`
   list-style: none;
@@ -14,8 +18,15 @@ export const ItemListaVaziaEstilizado = styled.li`
   padding: 10px;
   border-radius: 10px;
 `;
-/*
+
+interface ItemProps {
+  tarefa: string;
+  handleRemoveItem?: React.FormEventHandler<HTMLFormElement>
+}
+
 export function Item(props: ItemProps) {
+  const [itemChecked, setItemChecked] = useState<boolean>(true);
+  
   return (
     <ItemEstilizado>
       <input
@@ -27,10 +38,10 @@ export function Item(props: ItemProps) {
       <TarefaTitulo
         style={{ textDecoration: (!itemChecked) ? 'line-through' : 'none' }}
       >
-        {item.tarefa}
+        {props.tarefa}
       </TarefaTitulo>
       <ContainerBotoes>
-        <form onSubmit={() => HandleRemoveItem(item.id)}>
+        <form onSubmit={props.handleRemoveItem}>
           <BotaoApagar type="submit">
             <AiOutlineDelete size={15} />
           </BotaoApagar>
@@ -39,6 +50,17 @@ export function Item(props: ItemProps) {
     </ItemEstilizado>
   );
 }
+
+const TarefaTitulo = styled.span`
+  text-align: start;
+  width: 100%;
+  margin-right: 5px;
+  margin-left: 5px;
+`;
+
+const BotaoApagar = styled(Botao)`
+  background-color: orangered;
+`;
 
 const ItemEstilizado = styled.li`
   list-style: none;
@@ -62,4 +84,3 @@ const ItemEstilizado = styled.li`
     margin-bottom: 0;
   }
 `;
-*/

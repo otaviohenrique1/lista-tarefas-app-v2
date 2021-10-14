@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { AiOutlineClear, AiOutlineDelete, AiOutlineSave } from "react-icons/ai";
+import { AiOutlineClear, AiOutlineSave } from "react-icons/ai";
+// import { AiOutlineDelete } from "react-icons/ai";
 import styled from "styled-components";
 import { Botao } from "../../components/Botao";
 import { ContainerApp, ContainerBotoes } from "../../components/Container";
@@ -9,7 +10,7 @@ import { FormTypes, MensagemErro, valoresIniciais } from "../../utils/utils";
 import { Form, Formik, FormikHelpers } from "formik";
 import { Mensagem } from "../../components/Mensagem";
 import { Campo } from "../../components/Campo";
-import { ItemListaVaziaEstilizado } from "../../components/Item";
+import { Item, ItemListaVaziaEstilizado } from "../../components/Item";
 
 interface DataTypeTarefa {
   id: number,
@@ -22,7 +23,11 @@ export const validacao = Yup.object().shape({
 
 export function ListaTarefas() {
   const [data, setData] = useState<DataTypeTarefa[]>([]);
-  const [itemChecked, setItemChecked] = useState<boolean>(true);
+  // const [itemChecked, setItemChecked] = useState<boolean>(true);
+  
+  useEffect(() => {
+    setData(data);
+  }, [data]);
 
   function handleSubmitForm(values: FormTypes, formikHelpers: FormikHelpers<FormTypes>) {
     const id = Math.floor(Math.random() * 100000);
@@ -39,9 +44,10 @@ export function ListaTarefas() {
     formikHelpers.resetForm();
   }
 
-  useEffect(() => {
-    setData(data);
-  }, [data]);
+  function HandleRemoveItem(id: number) {
+    const tarefaRemovida = data.filter((tarefa) => tarefa.id !== id);
+    setData(tarefaRemovida);
+  }
 
   return (
     <ContainerApp>
@@ -79,38 +85,37 @@ export function ListaTarefas() {
           </ItemListaVaziaEstilizado>
         ) : data.map((item, index) => {
           return (
-            <ItemEstilizado
-              key={index}
-            >
-              <input
-                type="checkbox"
-                name="check"
-                id="checkItem"
-                onClick={() => { setItemChecked(!itemChecked); }}
-              />
-              <TarefaTitulo
-                style={{ textDecoration: (!itemChecked) ? 'line-through' : 'none' }}
-              >
-                {item.tarefa}
-              </TarefaTitulo>
-              <ContainerBotoes>
-                <form onSubmit={() => HandleRemoveItem(item.id)}>
-                  <BotaoApagar type="submit">
-                    <AiOutlineDelete size={15} />
-                  </BotaoApagar>
-                </form>
-              </ContainerBotoes>
-            </ItemEstilizado>
+            <Item
+              tarefa={item.tarefa}
+              handleRemoveItem={() => HandleRemoveItem(item.id)}
+            />
+            // <ItemEstilizado
+            //   key={index}
+            // >
+            //   <input
+            //     type="checkbox"
+            //     name="check"
+            //     id="checkItem"
+            //     onClick={() => { setItemChecked(!itemChecked); }}
+            //   />
+            //   <TarefaTitulo
+            //     style={{ textDecoration: (!itemChecked) ? 'line-through' : 'none' }}
+            //   >
+            //     {item.tarefa}
+            //   </TarefaTitulo>
+            //   <ContainerBotoes>
+            //     <form onSubmit={() => HandleRemoveItem(item.id)}>
+            //       <BotaoApagar type="submit">
+            //         <AiOutlineDelete size={15} />
+            //       </BotaoApagar>
+            //     </form>
+            //   </ContainerBotoes>
+            // </ItemEstilizado>
           );
         })}
       </ListaEstilizada>
     </ContainerApp>
   );
-
-  function HandleRemoveItem(id: number) {
-    const tarefaRemovida = data.filter((tarefa) => tarefa.id !== id);
-    setData(tarefaRemovida);
-  }
 }
 
 const ContainerBotoesEstilizado = styled(ContainerBotoes)`
@@ -137,36 +142,36 @@ const ListaEstilizada = styled.ul`
   padding-inline-start: 0;
 `;
 
-const ItemEstilizado = styled.li`
-  list-style: none;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  background-color: aliceblue;
-  border-color: cadetblue;
-  border-width: 1px;
-  border-style: solid;
-  padding: 10px;
-  border-radius: 10px;
+// const ItemEstilizado = styled.li`
+//   list-style: none;
+//   display: flex;
+//   flex-direction: row;
+//   align-items: center;
+//   justify-content: space-between;
+//   background-color: aliceblue;
+//   border-color: cadetblue;
+//   border-width: 1px;
+//   border-style: solid;
+//   padding: 10px;
+//   border-radius: 10px;
 
-  & {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
+//   & {
+//     margin-top: 10px;
+//     margin-bottom: 10px;
+//   }
 
-  &:first-child {
-    margin-bottom: 0;
-  }
-`;
+//   &:first-child {
+//     margin-bottom: 0;
+//   }
+// `;
 
-const BotaoApagar = styled(Botao)`
-  background-color: orangered;
-`;
+// const BotaoApagar = styled(Botao)`
+//   background-color: orangered;
+// `;
 
-const TarefaTitulo = styled.span`
-  text-align: start;
-  width: 100%;
-  margin-right: 5px;
-  margin-left: 5px;
-`;
+// const TarefaTitulo = styled.span`
+//   text-align: start;
+//   width: 100%;
+//   margin-right: 5px;
+//   margin-left: 5px;
+// `;
